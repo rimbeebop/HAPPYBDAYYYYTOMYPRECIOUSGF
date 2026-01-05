@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For You ♡</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.screen {
+  display: none;
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  text-align: center;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* LOCK */
+.locker-img {
+  width: 160px;
+  margin: 0 auto 16px;
+  display: block;
+  opacity: 0.9;
+}
+
+h1 {
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 16px;
+}
+
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+button {
+  padding: 10px 18px;
+  font-size: 14px;
+  border: none;
+  border-radius: 20px;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #eee;
+  color: black;
+}
+
+/* POPUP */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.popup {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* LETTER */
+.paper-container {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.paper-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* TEXT ON PAPER */
+.paper-text {
+  position: absolute;
+  top: 80px;
+  left: 60px;
+  right: 60px;
+
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #333;
+
+  white-space: pre-wrap;
+  opacity: 0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div class="screen active" id="passwordScreen">
+  <img
+    src="https://img.sanishtech.com/u/311acc55c2b20b316cca5cde1773c539.png"
+    alt="lock"
+    class="locker-img"
+  />
+
+  <h1>hiiii, if u are my precious idil js enter the password</h1>
+
+  <input
+    type="password"
+    id="passwordInput"
+    placeholder="the nickname i gave u on ig dms"
+  />
+
+  <button onclick="checkPassword()">unlock</button>
+</div>
+
+<!-- LETTER SCREEN -->
+<div class="screen" id="letterScreen">
+  <div class="paper-container">
+    <img
+      src="https://img.sanishtech.com/u/99b2c3cc70dd211052bbb94c05c1eb64.png"
+      alt="paper"
+    />
+
+    <div
+      class="paper-text"
+      id="paperText"
+      data-text="İyi ki doğdun sevgilim,Fiziksel bi not yazmak ve o notu saklamak biraz riskli olduğundan böyle bi' yola başvurdum :p şartlar ne kadar zorlayıcı olursa olsun her zaman bi' yolunu bulacağım, bu digi-letter da bunun bi göstergesi olsun istedim. Neyse of nereden başlayacağımı gerçekten bilmiyorum. 19 oldun, i won't be able to make fun of u for a couple of months ama olsun zaten 20 kulağa çok korkunç geliyo. Umarım 19'un çok çok güzel ve sana iyi gelecek isteklerine kavuştuğun bi' yaş olur. Benimkini ben hep ,,seninle tanıştığım yaş,, olarak hatırlayacağım.
+
+Hayatıma aniden girip bu kadar değiştirebileceğini hiç düşünmezdim. LIKE I CRAVE U LIKE A BITCHHH TT Birlikteyken her seferinde keşke zamanı durdurabilsem diyorum içimden, o kadar hızlı geçiyo ki oflayıp puflamadan duramıyorum, sen yokken de (which is most of the time unfortunately) zaman hiç geçmiyo. Seni çok özlüyorum. Yanında güvende hissediyorum. Arkadaşken de bi' tek seninle o kadar güvende hissediyodum, umarım sen de böyle hissediyorsundur.
+
+Seni ve seninle ilgili her şeyi çok seviyorum AND NOTHIN WILL CHANGE THAT. No matter what happens i'll always be there for u!
+
+Daha nice yaşlarını birlikte kutlamak dileğiyle <333333
+
+Hilal"
+    ></div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popupOverlay">
+  <div class="popup">
+    <p id="popupMessage"></p>
+    <div class="popup-buttons" id="popupButtons"></div>
+  </div>
+</div>
+
+<script>
+const correctPassword = "labubu";
+
+function checkPassword() {
+  const input = document.getElementById("passwordInput").value;
+  if (input === correctPassword) {
+    showCorrectPopup();
+  } else {
+    showWrongPopup();
+  }
+}
+
+function showWrongPopup() {
+  openPopup("are u fr 🙄", [
+    { text: "ok lemme try again", action: closePopup, secondary: true }
+  ]);
+}
+
+function showCorrectPopup() {
+  openPopup("YUPPP now do u wanna see my digi-letter?", [
+    { text: "SUREEEEW", action: goToLetter },
+    { text: "YESSSSS", action: goToLetter }
+  ]);
+}
+
+function openPopup(message, buttons) {
+  document.getElementById("popupMessage").innerText = message;
+  const btnContainer = document.getElementById("popupButtons");
+  btnContainer.innerHTML = "";
+
+  buttons.forEach(b => {
+    const btn = document.createElement("button");
+    btn.innerText = b.text;
+    if (b.secondary) btn.classList.add("secondary");
+    btn.onclick = b.action;
+    btnContainer.appendChild(btn);
+  });
+
+  document.getElementById("popupOverlay").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popupOverlay").style.display = "none";
+}
+
+function goToLetter() {
+  closePopup();
+  document.getElementById("passwordScreen").classList.remove("active");
+  document.getElementById("letterScreen").classList.add("active");
+  startTyping();
+}
+
+function startTyping() {
+  const paper = document.getElementById("paperText");
+  const text = paper.getAttribute("data-text");
+  paper.innerText = "";
+  paper.style.opacity = 1;
+
+  let i = 0;
+  const speed = 55; // YAVAŞ typing
+
+  function typeChar() {
+    if (i < text.length) {
+      paper.innerText += text.charAt(i);
+      i++;
+      setTimeout(typeChar, speed);
+    }
+  }
+
+  typeChar();
+}
+</script>
+
+</body>
+</html>
